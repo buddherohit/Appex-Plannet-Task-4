@@ -1,117 +1,166 @@
-# Smart User Management System
+# Student Career & Placement Portal
 
-A secure, responsive, and modern Full-Stack User Management System developed as an Internship Task-3 submission. This system features robust authentication, session protection, role-based access control (RBAC), full CRUD operations for administrators, and profile picture uploads.
-
-## Tech Stack
-- **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript, Chart.js, Bootstrap Icons
-- **Backend**: PHP 8.0+ (using prepared statements and procedural mysqli)
-- **Database**: MySQL
-- **Environment**: XAMPP / WAMP server stack
+A complete, production-ready, Full Stack Web Application designed to support students accessing academic courses, sharing study resources, showcasing development projects, and applying for placement jobs and internships. The platform also provides administrators with aggregate statistics metrics, time-series trends using **Chart.js**, and centralized CRUD access for portal modules.
 
 ---
 
-## Key Features
+## 🚀 Technology Stack
 
-### 1. Robust Authentication & Session Controls
-- **Registration**: Form validation (both client-side JS and server-side PHP filters) verifying mobile formats, password lengths, and matching constraints.
-- **Duplicate Checks**: Real-time SQL checks utilizing prepared statements to prevent duplicate email registrations.
-- **Login Terminal**: Safe password matching using PHP's standard `password_verify()` against bcrypt hashes.
-- **Remember Me**: Cryptographically signed cookie mechanism (`base64` encoded format storing userId, email, and signature hash matching user password hash) to automatically log in returning users.
-- **Session Hijacking Prevention**: Forces `session_regenerate_id(true)` upon successful logins and sets secure cookie parameter settings.
+### Frontend
+- **React.js 18 (Vite)**
+- **Bootstrap 5 & Bootstrap Icons** (Responsive, glassmorphic themes)
+- **Chart.js & React Chartjs 2** (Interactive analytics charts)
+- **React Router DOM** (Single Page App routing)
+- **Axios** (REST API integration client with automatic authorization request interceptor)
 
-### 2. Role-Based Access Control (RBAC)
-- **Admin**: Has full access, including system statistics dashboard, visual Chart.js graphs, full activity logs auditing, and the ability to Create, Read, Update, and Delete (CRUD) users.
-- **User**: Has limited access, landing on their personal profile page and restricted dashboard displaying only their personal activity logs.
-- **Session Guards**: All PHP pages contain strict authorization guards directing unauthorized requests back to `login.php`.
+### Backend
+- **PHP 8+** (Object-oriented architecture with structured endpoint controllers)
+- **REST API** (Strict JSON responses, cross-origin resource sharing, CORS middleware)
 
-### 3. Comprehensive CRUD Panel (Admin Only)
-- **Create**: Add a new user directly, setting their specific system role.
-- **Read**: Dynamic Bootstrap 5 table with real-time column sorting (by Name, Date Registered, or Role), live searching (matching full name or email), and paginated rows limit (10 per page).
-- **Update**: Edit other users' details or force reset their passwords.
-- **Delete**: Employs interactive Bootstrap modals for deletion confirmations. Prevents administrative self-deletion.
-
-### 4. Profile Management & Picture Upload
-- **Profile Customization**: Users can edit their own contact details and set custom passwords.
-- **File Upload Security**:
-  - Validates file MIME types (`image/jpeg`, `image/jpg`, `image/png`) and file extensions on the server.
-  - Limits file uploads to a maximum of **2MB**.
-  - Verifies binary data validity using PHP's `getimagesize()` function to block malicious script injections.
-  - Automatically renames uploaded files to unique names (`avatar_...`) to prevent directory traversals.
-  - Deletes old avatar files from disk automatically upon updating pictures.
-
-### 5. Premium UI/UX Design
-- Beautiful **Glassmorphism panels** overlaying fluid gradient backgrounds.
-- Persistent **Dark Mode** switcher stored in the client browser's `localStorage` to prevent screen flash.
-- Completely fluid, responsive layouts optimized for mobile, tablet, and desktop monitors.
+### Database & Server
+- **MySQL** (Structured relationships, indices for search optimization, foreign key constraints)
+- **XAMPP Server** (Apache & MariaDB local environments)
 
 ---
 
-## File Structure
+## 🛠️ Key Security Controls
+- **Prepared Statements**: Strict usage of PDO prepared parameters in all queries preventing SQL Injection.
+- **Password Hashing**: Secure user password encryption via standard Blowfish `password_hash($pwd, PASSWORD_BCRYPT)` algorithm.
+- **API Token Verification**: Database-backed secure session tokens matching custom authorization headers (`Authorization: Bearer <token>`) preventing CSRF threats.
+- **Input Sanitization**: Multi-level sanitization filters applying `htmlspecialchars(strip_tags(...))` preventing Cross-Site Scripting (XSS).
+- **Strict File Validation**: Double-barrier mime type matching and file extension verification (enforcing PDF, DOC, DOCX, PPT, PPTX) with a strict size limit of 10MB.
+- **Randomized File Naming**: Avoids directory traversal and execution of malicious scripts (e.g. uploading `.php` scripts) by renaming all uploads with secure random hex ids.
 
-```
-user-management-system/
-├── assets/
-│   ├── css/
-│   │   └── style.css            # Custom glassmorphic stylesheet & dark-mode rules
-│   ├── js/
-│   │   └── main.js             # Client-side validations, theme toggle & modal bindings
-│   └── images/
-│       └── default-avatar.svg  # Vector avatar SVG fallback file
-├── config/
-│   └── database.php            # DB connection singleton & security helper functions
-├── includes/
-│   ├── header.php              # Global head scripts, CDN links & session starting
-│   ├── navbar.php              # Responsive top navigation & avatar dropdown menu
-│   ├── sidebar.php             # Contextual menu displaying options by user role
-│   └── footer.php              # Body closing tags & JS library bindings
-├── auth/
-│   ├── login.php               # Login page with remember-me & session security
-│   ├── register.php            # Client/Server validated registration form
-│   └── logout.php              # Complete session purge and cookie unlinking
-├── uploads/                    # Profile picture uploads storage directory (gitkept)
-├── dashboard.php               # System counters, activity list, & Chart.js graph
-├── users.php                   # Paginated and searchable users management table
-├── add-user.php                # Admin form to add users
-├── edit-user.php               # Admin form to edit users
-├── delete-user.php             # Strict delete handler form action
-├── profile.php                 # Personal profile panel and picture uploader
-├── index.php                   # Router script forwarding sessions
-├── schema.sql                  # Database structure & default seed accounts
-└── README.md                   # Installation & deployment documentation
+---
+
+## 📂 Project Structure
+
+```text
+Appex Plannet/
+├── backend/
+│   ├── api/
+│   │   ├── auth.php         # Registration, login, profile, password recoveries
+│   │   ├── courses.php      # Course CRUD with search & category filters
+│   │   ├── notes.php        # Resource upload with type/size checks & delete rules
+│   │   ├── projects.php     # Student showcase projects registry
+│   │   ├── jobs.php         # Placements board CRUD & application redirectors
+│   │   └── dashboard.php    # Aggregated metrics counters & Chart.js data streams
+│   ├── config/
+│   │   ├── database.php     # PDO connection initializer
+│   │   └── helpers.php      # Common functions, CORS headers, auth validation
+│   ├── uploads/             # Notes, thumbnails, and profile images storage
+│   └── schema.sql           # Database structures initialization script
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Sidebar, Header, Footer, ProtectedRoute guards
+│   │   ├── context/         # AuthContext (login, register, logout, profiles, themes)
+│   │   ├── pages/           # Landing, About, Login, Register, Dashboards, Resources
+│   │   ├── services/        # Central api.js Axios client
+│   │   ├── App.jsx          # Route declarations mapping
+│   │   ├── index.css        # Glassmorphic themes & dark mode stylesheet
+│   │   └── main.jsx         # App entry mounting point
+│   ├── index.html           # Main HTML index with font loader
+│   └── package.json         # Node dependency lock
+└── README.md                # System documentation
 ```
 
 ---
 
-## Setup & Installation Guide
+## 💻 Installation & Setup
 
-Follow these steps to host and run this project locally on your XAMPP installation:
-
-### Step 1: Clone or Copy Project Files
-Place this repository folder directly inside your XAMPP `htdocs` directory:
-`C:\xampp\htdocs\user-management-system`
-
-### Step 2: Database Initialization
-1. Launch **XAMPP Control Panel** and start both **Apache** and **MySQL** services.
-2. Open your web browser and navigate to **phpMyAdmin**: `http://localhost/phpmyadmin/`
+### 1. Database & Backend Configuration (XAMPP)
+1. Start **XAMPP Control Panel** and run **Apache** and **MySQL**.
+2. Open **phpMyAdmin** (`http://localhost/phpmyadmin`).
 3. Click on the **SQL** tab.
-4. Open the [schema.sql](file:///e:/Appex%20Plannet/schema.sql) file included in this project, copy the entire SQL text, paste it into the phpMyAdmin SQL command box, and click **Go**.
-5. This automatically:
-   - Creates the database `user_management_system`.
-   - Creates the `users` and `activity_logs` tables.
-   - Seeds default accounts:
-     - **Administrator**: `admin@smartums.com` | Password: `admin123`
-     - **Standard User**: `user@smartums.com` | Password: `user123`
+4. Open the SQL schema script file [schema.sql](file:///e:/Appex%20Plannet/backend/schema.sql), copy its SQL contents, paste it into the phpMyAdmin SQL query area, and click **Go** to create the `placement_portal` database.
+5. Create a folder named `backend` inside your local XAMPP `htdocs` folder (e.g. `C:\xampp\htdocs\backend`).
+6. Copy all files from the project's [backend/](file:///e:/Appex%20Plannet/backend/) folder into `C:\xampp\htdocs\backend\`.
+   > [!IMPORTANT]
+   > Make sure the folder `C:\xampp\htdocs\backend\uploads` exists. If not, create it and ensure write permissions.
 
-### Step 3: Run the Application
-1. In your browser, open the application URL:
-   `http://localhost/user-management-system/`
-2. You will be automatically redirected to the Login terminal.
-3. Log in with either the Admin or User credentials listed above to explore the dashboards.
+### 2. Frontend Configuration & Execution
+1. Open a terminal inside the [frontend/](file:///e:/Appex%20Plannet/frontend/) folder.
+2. Verify dependencies are installed:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Access the portal in your browser at: `http://localhost:5173`.
 
 ---
 
-## Security Implementation Summary
-- **SQL Injection**: Prevented using standard PHP parameter binding via `mysqli_prepare` and `mysqli_stmt_bind_param`.
-- **XSS (Cross-Site Scripting)**: Neutralized using `escape_html()` (utilizing `htmlspecialchars($val, ENT_QUOTES, 'UTF-8')`) on all dynamic UI text.
-- **CSRF (Cross-Site Request Forgery)**: Blocked using random hex token tokens generated on page loads, embedded as hidden form parameters, and verified server-side on posts.
-- **Upload Guards**: Restricts files to less than 2MB, validates true image structures using `getimagesize()`, handles extension matches, and sanitizes filenames.
+## 🔑 Default Accounts (For Evaluation)
+
+### 1. Admin Account
+- **Email**: `admin@placement.com`
+- **Password**: `admin123`
+- *Privileges*: Access to the statistical graphs, global activity audit table, and complete control over inserting, updating, and deleting courses, notes, projects, and job postings.
+
+### 2. Student Account
+- Create one using the registration page (`/register`), or log in using any student details you set up.
+- *Privileges*: Access to study resource tables (upload own notes, download notes), register developer projects in the showcase, view active course categories, and search the placements board for internships.
+
+---
+
+## 📡 REST API Documentation
+
+All API requests pass user credentials in the headers:
+`Authorization: Bearer <token_string>`
+
+### 1. Authentication (`backend/api/auth.php`)
+- **POST** `?action=register`: Register student accounts.
+  - *Payload*: `{ "full_name", "email", "mobile", "password" }`
+- **POST** `?action=login`: Log in to retrieve tokens.
+  - *Payload*: `{ "email", "password" }`
+- **GET** `?action=verify`: Verify token active state.
+- **POST** `?action=forgot`: Password recovery trigger.
+  - *Payload*: `{ "email" }`
+- **POST** `?action=reset`: Change password using token code.
+  - *Payload*: `{ "email", "token", "password" }`
+- **POST** `?action=update_profile`: Update account details (multipart form-data).
+  - *Payload*: `{ "full_name", "email", "mobile", "profile_image" (File) }`
+- **POST** `?action=change_password`: Password rotation.
+  - *Payload*: `{ "current_password", "new_password" }`
+
+### 2. Dashboard (`backend/api/dashboard.php`)
+- **GET**: Aggregated metric logs and time-series statistics.
+
+### 3. Courses (`backend/api/courses.php`)
+- **GET**: Read paginated list. Filter by query search or categories.
+- **POST**: Admin only. Insert course card (multipart form-data).
+- **POST** `?action=update`: Admin only. Edit details (multipart form-data).
+- **DELETE** `?id=<id>`: Admin only. Delete course.
+
+### 4. Notes (`backend/api/notes.php`)
+- **GET**: Fetch resource table list. Filter by subjects.
+- **POST**: Upload study notes (multipart form-data). Max size: 10MB.
+- **DELETE** `?id=<id>`: Delete notes file (restricted to note uploader or admin).
+
+### 5. Projects (`backend/api/projects.php`)
+- **GET**: Read student project list.
+- **POST**: Create project registry.
+- **PUT**: Update project card details.
+- **DELETE** `?id=<id>`: Delete project record.
+
+### 6. Jobs (`backend/api/jobs.php`)
+- **GET**: Read vacancies board. Filter by company and location.
+- **POST**: Admin only. Create job opening details.
+- **PUT**: Admin only. Edit job details.
+- **DELETE** `?id=<id>`: Admin only. Delete vacancy listing.
+
+---
+
+## 📺 Demonstration Flow (10-Minute Guide)
+1. **Registration**: Go to `/register` and register a new student account.
+2. **Login**: Authenticate with the created student account or use the default Admin account.
+3. **Student Dashboard**: Explore the profile cards, quick action links, and local activity log panel.
+4. **Courses Manage**: Log in as Admin and click **Create Course**. Upload a custom thumbnail image. Log in as Student to view the course card.
+5. **Notes Upload**: Click **Upload Resource**, browse and select a `.pdf`, `.docx`, or `.pptx` file under 10MB. Validate that the document icon updates dynamically.
+6. **Project Showcase**: Go to Projects. Add a title, description, and copy-paste GitHub and demo URLs. View the click redirects.
+7. **Placement Job Board**: Log in as Admin, create a job opening details sheet, and save. Log in as Student, query by company or location, and view details.
+8. **Forgot / Reset Password**: Try logging out, go to `/forgot-password`, trigger email recovery, copy the simulated token, and reset password successfully.
+9. **Analytics Graphs**: Log in as Admin and view Chart.js registrations, course categories bar charts, and job timeline graphs.
+10. **Profile Settings**: Go to Profile, upload a customized avatar image, edit contact details, and rotate account password.
